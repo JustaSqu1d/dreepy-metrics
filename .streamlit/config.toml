@@ -1,0 +1,16 @@
+[browser]
+gatherUsageStats = false
+[server]
+enableCORS = false
+enableXsrfProtection = false
+enableWebsocketCompression = false
+[client]
+showErrorDetails = false
+[theme]
+base = "dark"
+primaryColor = "#77967E"
+backgroundColor = "#25282D"
+secondaryBackgroundColor = "#3A3A44"
+textColor = "#AEDCBC"
+[runner]
+magicEnabled = false
