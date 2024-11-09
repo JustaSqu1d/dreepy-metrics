@@ -14,7 +14,7 @@ selected_events = st.pills("Select events", events, key="events", selection_mode
 
 st.divider()
 
-sidebar, details = st.columns([20, 80], gap="large")
+sidebar, details = st.columns([25, 75], gap="large")
 
 with sidebar:
     pokemon_data, teams, sorted_pokemon_by_name = get_data(selected_events)
