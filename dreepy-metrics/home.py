@@ -10,7 +10,7 @@ st.divider()
 
 selected_events = st.pills("Select events", events, key="events", selection_mode="multi", format_func=lambda x: x,
                            default=["baltimore2025", "dortmund2025", "joinville2025", "louisville2025", "lille2025",
-                                    "gdansk2025"])
+                                    "gdansk2025", "laic2025"])
 
 st.divider()
 
