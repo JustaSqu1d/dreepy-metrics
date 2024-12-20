@@ -1,17 +1,18 @@
 import pandas as pd
 import streamlit as st
 
-from data import get_data, get_events
+from data import get_data, get_events, get_active_events
 
 events = get_events()
+
+active_events = get_active_events()
 
 st.write("## Team Builder")
 
 st.divider()
 
 selected_events = st.pills("Events", events, key="events", selection_mode="multi", format_func=lambda x: x,
-                           default=["baltimore2025", "dortmund2025", "joinville2025", "louisville2025", "lille2025",
-                                    "gdansk2025", "laic2025", "sacramento2025", "stuttgart2025", "perth2025"])
+                           default=active_events)
 
 st.divider()
 
