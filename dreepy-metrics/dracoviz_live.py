@@ -267,8 +267,8 @@ if url:
         # add percentage
         for pokemon in sorted_usage_counter:
             final_usage_counter[pokemon] = {
-                "Percentage": sorted_usage_counter[pokemon],
-                "Count": f"{sorted_usage_counter[pokemon] / total_teams * 100:.2f}%"
+                "Count": sorted_usage_counter[pokemon],
+                "Percentage": f"{sorted_usage_counter[pokemon] / total_teams * 100:.2f}%"
             }
 
         with placeholder3:
