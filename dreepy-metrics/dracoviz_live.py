@@ -7,11 +7,14 @@ import streamlit as st
 
 
 def convert_move_name(move_name):
-    move_name = move_name.replace("_FAST", "")
-    move_name = move_name.replace("_PLUS", "+")
-    move_name = move_name.replace("SUPER_POWER", "Superpower")
-    move_name = move_name.replace("_", " ")
-    return move_name.title()
+    if move_name:
+        move_name = move_name.replace("_FAST", "")
+        move_name = move_name.replace("_PLUS", "+")
+        move_name = move_name.replace("SUPER_POWER", "Superpower")
+        move_name = move_name.replace("_", " ")
+        return move_name.title()
+    else:
+        return None
 
 
 def convert_species_name(species_name):
