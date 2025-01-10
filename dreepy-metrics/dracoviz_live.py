@@ -14,7 +14,7 @@ def convert_move_name(move_name):
         move_name = move_name.replace("_", " ")
         return move_name.title()
     else:
-        return None
+        return "None"
 
 
 def convert_species_name(species_name):
