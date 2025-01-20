@@ -67,7 +67,7 @@ if expander:
             }
 
         expander.dataframe(pd.DataFrame(common_pairings_dict).T)
-    else:
+    if len(current_team) > 1:
         for team_id in common_teams:
             team = teams.get(team_id)
             player_name = team.get("player_name")
