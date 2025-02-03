@@ -1,5 +1,6 @@
 import requests
 import time
+import json
 
 
 def get_data(event_ids):
@@ -9,11 +10,8 @@ def get_data(event_ids):
     pokemon_data = {}
 
     for event_id in event_ids:
-        url = f"https://raw.githubusercontent.com/JustaSqu1d/play-pokemon-go-data/refs/heads/master/teams/{event_id}.json"
-        try:
-            event_data = requests.get(url).json()
-        except requests.exceptions.JSONDecodeError:
-            continue
+        with open(f"data/teams/{event_id}.json", "r") as f:
+            event_data = json.load(f)
 
         for team in event_data:
             player_name = team["team"]["player_name"]
