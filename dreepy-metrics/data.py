@@ -1,6 +1,6 @@
-import requests
 import time
 import json
+import os
 
 
 def get_data(event_ids):
@@ -10,7 +10,8 @@ def get_data(event_ids):
     pokemon_data = {}
 
     for event_id in event_ids:
-        with open(f"data/teams/{event_id}.json", "r") as f:
+        path = os.path.dirname(__file__)
+        with open(path + f"/data/teams/{event_id}.json", "r") as f:
             event_data = json.load(f)
 
         for team in event_data:
@@ -102,9 +103,9 @@ def get_data(event_ids):
 
 
 def get_events(show_future=False):
-    url = "https://raw.githubusercontent.com/JustaSqu1d/play-pokemon-go-data/refs/heads/master/events/events.json"
-
-    events = requests.get(url).json()
+    path = os.path.dirname(__file__)
+    with open(path + "/data/events/events.json", "r") as f:
+        events = json.load(f)
 
     if not show_future:
         events = [event for event in events if time.time() > events.get(event).get("time")]
