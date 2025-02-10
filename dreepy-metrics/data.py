@@ -11,8 +11,11 @@ def get_data(event_ids):
 
     for event_id in event_ids:
         path = os.path.dirname(__file__)
-        with open(path + f"/data/teams/{event_id}.json", "r") as f:
-            event_data = json.load(f)
+        try:
+            with open(path + f"/data/teams/{event_id}.json", "r") as f:
+                event_data = json.load(f)
+        except FileNotFoundError:
+            st.warning(f"No data for {event_id}, yet!")
 
         for team in event_data:
             player_name = team["team"]["player_name"]
@@ -120,4 +123,4 @@ def get_events(show_future=False):
 def get_active_events():
     return ["baltimore2025", "dortmund2025", "joinville2025", "louisville2025", "lille2025",
             "gdansk2025", "laic2025", "sacramento2025", "stuttgart2025", "perth2025", "toronto2025", 
-            "birmingham2025", "riodejaneiro2025", "sanantonio2025"]
+            "birmingham2025", "riodejaneiro2025", "sanantonio2025", "merida2025"]
