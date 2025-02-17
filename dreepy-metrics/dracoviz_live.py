@@ -76,23 +76,24 @@ if url:
                 continue
 
         matches = []
-        for round_data in data["bracket"]:
-            for match in round_data["matches"]:
-                participants = match["participants"][0]
-                player1 = participants[0]["name"]
-                player2 = participants[1]["name"]
+        if data.get("bracket") is not None:
+            for round_data in data["bracket"]:
+                for match in round_data["matches"]:
+                    participants = match["participants"][0]
+                    player1 = participants[0]["name"]
+                    player2 = participants[1]["name"]
 
-                score1 = match["score"][0][0]
-                score2 = match["score"][0][1]
+                    score1 = match["score"][0][0]
+                    score2 = match["score"][0][1]
 
-                if score1 > score2:
-                    winner = player1
-                elif score2 > score1:
-                    winner = player2
-                else:
-                    winner = None
+                    if score1 > score2:
+                        winner = player1
+                    elif score2 > score1:
+                        winner = player2
+                    else:
+                        winner = None
 
-                matches.append({"player1": player1, "player2": player2, "winner": winner})
+                    matches.append({"player1": player1, "player2": player2, "winner": winner})
 
         player_dict = {}
 

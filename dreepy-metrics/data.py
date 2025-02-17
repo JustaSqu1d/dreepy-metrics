@@ -113,7 +113,7 @@ def get_events(show_future=False):
     if not show_future:
         events = [event for event in events if time.time() > events.get(event).get("time")]
 
-    blacklisted_events = ["lima2025", "buenosaires2025", "bogota2025"]
+    blacklisted_events = ["lima2025", "buenosaires2025", "bogota2025", "carolina2025"]
 
     events = [event for event in events if event not in blacklisted_events]
 
