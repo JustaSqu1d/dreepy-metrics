@@ -22,7 +22,7 @@ def get_data(event_ids):
             team_id = team["url"].split("/")[-1]
             tournament_id = team["url"].split("/")[-2]
 
-            del team["team"]["player_name"]
+            del team["player_name"]
 
             team_array = []
 
