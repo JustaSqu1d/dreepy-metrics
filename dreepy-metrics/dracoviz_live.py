@@ -4,7 +4,6 @@ import pandas as pd
 import requests
 import streamlit
 import streamlit as st
-from streamlit_extras.stoggle import stoggle
 
 
 def convert_move_name(move_name):
