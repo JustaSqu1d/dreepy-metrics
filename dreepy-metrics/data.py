@@ -3,7 +3,7 @@ import json
 import os
 
 
-def get_data(event_ids):
+def get_data(st, event_ids):
     teams = {}
     all_pokemon = []
     sorted_pokemon_by_name = {}
@@ -18,11 +18,9 @@ def get_data(event_ids):
             st.warning(f"No data for {event_id}, yet!")
 
         for team in event_data:
-            player_name = team["team"]["player_name"]
+            player_name = team["player_name"]
             team_id = team["url"].split("/")[-1]
             tournament_id = team["url"].split("/")[-2]
-
-            del team["player_name"]
 
             team_array = []
 

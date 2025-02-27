@@ -16,7 +16,7 @@ selected_events = st.pills("Events", events, key="events", selection_mode="multi
 
 st.divider()
 
-pokemon_data, teams, sorted_pokemon_by_name = get_data(selected_events)
+pokemon_data, teams, sorted_pokemon_by_name = get_data(st, selected_events)
 
 # select a pokemon
 current_team = st.multiselect("Select Pokémon", list(pokemon_data.keys()), max_selections=6)
@@ -67,7 +67,7 @@ if expander:
             }
 
         expander.dataframe(pd.DataFrame(common_pairings_dict).T)
-    if len(current_team) > 1:
+    if len(current_team) >= 1:
         for team_id in common_teams:
             team = teams.get(team_id)
             player_name = team.get("player_name")

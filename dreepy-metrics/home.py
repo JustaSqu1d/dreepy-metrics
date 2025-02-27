@@ -18,7 +18,7 @@ st.divider()
 sidebar, details = st.columns([25, 75], gap="large")
 
 with sidebar:
-    pokemon_data, teams, sorted_pokemon_by_name = get_data(selected_events)
+    pokemon_data, teams, sorted_pokemon_by_name = get_data(st, selected_events)
 
     with st.container(height=450, border=True):
         sorted_pokemon_by_total = sorted(pokemon_data.items(), key=lambda x: x[1]["total_pokemon"], reverse=True)
