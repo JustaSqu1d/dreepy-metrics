@@ -259,7 +259,10 @@ if url:
             player_dict[player]["sonneborn_berger"] = sonneborn_berger_score
 
         for player in player_dict:
-            head_to_head_wins = sum(1 for match in matches if match["winner"] == player and match["player2"] in player_dict[player]["opponents"])
+            head_to_head_wins = 0
+            for opponent in player_dict[player]["opponents"]:
+                if player_dict[player]["wins"] == player_dict[opponent]["wins"]:
+                    head_to_head_wins += 1
             player_dict[player]["head_to_head"] = head_to_head_wins
 
 
