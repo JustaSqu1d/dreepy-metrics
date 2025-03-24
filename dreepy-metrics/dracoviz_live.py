@@ -56,8 +56,8 @@ with st.expander("What's the difference between tiebreakers?"):
     - Buchholz (Cut-1): The sum of the scores of all of your opponents, minus the lowest score.
     - Median Buchholz: The sum of the scores of all of your opponents, minus the highest and lowest scores.
     - Game Wins: The number of games you have won.
-    - Sonneborn-Berger: The sum of the scores of all of your opponents, multiplied by your score against them.
-    - Head-to-Head: The amount of sets you have won against the player(s) you are tied with.
+    - Sonneborn-Berger: The sum of the scores of the players you have defeated.
+    - Head-to-Head: The amount of matches you have won against the player(s) you are tied with.
     """)
 
 if url:
@@ -125,10 +125,10 @@ if url:
             player2_score = match["player2_score"]
 
             if player1 not in player_dict:
-                player_dict[player1] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": []}
+                player_dict[player1] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": [], "won_against": [], "lost_against": []}
 
             if player2 not in player_dict:
-                player_dict[player2] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": []}
+                player_dict[player2] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": [], "won_against": [], "lost_against": []}
 
             # don't add "Bye" as an opponent
             if player2 != "Bye":
@@ -138,10 +138,14 @@ if url:
             if winner == player1:
                 player_dict[player1]["wins"] += 1
                 player_dict[player2]["losses"] += 1
+                player_dict[player1]["won_against"].append(player2)
+                player_dict[player2]["lost_against"].append(player1)
 
             if winner == player2:
                 player_dict[player2]["wins"] += 1
                 player_dict[player1]["losses"] += 1
+                player_dict[player2]["won_against"].append(player1)
+                player_dict[player1]["lost_against"].append(player2)
 
         for player in data.get("players", []):
             name = player.get("name")
@@ -253,15 +257,14 @@ if url:
 
         for player in player_dict:
             sonneborn_berger_score = 0
-            for opponent in player_dict[player]["opponents"]:
-                if player_dict[player]["wins"] > player_dict[opponent]["wins"]:
-                    sonneborn_berger_score += player_dict[opponent]["wins"]
+            for opponent in player_dict[player]["won_against"]:
+                sonneborn_berger_score += player_dict[opponent]["wins"]
             player_dict[player]["sonneborn_berger"] = sonneborn_berger_score
 
         for player in player_dict:
             head_to_head_wins = 0
             for opponent in player_dict[player]["opponents"]:
-                if player_dict[player]["wins"] == player_dict[opponent]["wins"]:
+                if player_dict[player]["wins"] == player_dict[opponent]["wins"] and opponent in player_dict[player]["won_against"]:
                     head_to_head_wins += 1
             player_dict[player]["head_to_head"] = head_to_head_wins
 
