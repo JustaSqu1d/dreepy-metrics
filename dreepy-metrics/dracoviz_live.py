@@ -323,6 +323,7 @@ if url:
                     key=lambda x: (
                         x[1]["wins"],
                         x[1]["game_wins"],
+                        -x[1]["game_losses"],
                         x[1]["buchholz"],
                         x[1]["head_to_head"],
                     ),
