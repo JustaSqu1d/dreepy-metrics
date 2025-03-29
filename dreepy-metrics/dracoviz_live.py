@@ -470,4 +470,8 @@ if url:
                 df = pd.DataFrame(final_usage_counter).T
                 st.dataframe(data=df)
 
-            time.sleep(10)
+
+            if data.get("concluded"):
+                break
+
+            time.sleep(60)
