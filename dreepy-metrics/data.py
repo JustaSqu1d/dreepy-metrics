@@ -121,4 +121,4 @@ def get_events(show_future=False):
 def get_active_events():
     return ["laic2025", "sacramento2025", "stuttgart2025", "perth2025", "toronto2025", 
             "birmingham2025", "riodejaneiro2025", "sanantonio2025", "merida2025", "euic2025", "vancouver2025", 
-            "fortaleza2025", "stockholm2025", "brisbane2025"]
+            "fortaleza2025", "stockholm2025", "brisbane2025", "atlanta2025"]
