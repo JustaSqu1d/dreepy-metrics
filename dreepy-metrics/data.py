@@ -111,7 +111,7 @@ def get_events(show_future=False):
     if not show_future:
         events = [event for event in events if time.time() > events.get(event).get("time")]
 
-    blacklisted_events = ["lima2025", "buenosaires2025", "bogota2025", "carolina2025"]
+    blacklisted_events = ["lima2025", "buenosaires2025", "bogota2025", "carolina2025", "johannesburg2025"]
 
     events = [event for event in events if event not in blacklisted_events]
 
@@ -121,4 +121,5 @@ def get_events(show_future=False):
 def get_active_events():
     return ["laic2025", "sacramento2025", "stuttgart2025", "perth2025", "toronto2025", 
             "birmingham2025", "riodejaneiro2025", "sanantonio2025", "merida2025", "euic2025", "vancouver2025", 
-            "fortaleza2025", "stockholm2025", "brisbane2025", "atlanta2025", "monterrey2025", "milwaukee2025"]
+            "fortaleza2025", "stockholm2025", "brisbane2025", "atlanta2025", "monterrey2025", "milwaukee2025",
+            "seville2025", "melbourne2025", "utrecht2025", "santiago2025"]
