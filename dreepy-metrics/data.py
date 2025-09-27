@@ -119,4 +119,4 @@ def get_events(show_future=False):
 
 
 def get_active_events():
-    return ["frankfurt2026", "monterrey2026"]
+    return ["frankfurt2026", "monterrey2026", "pittsburgh2026"]
