@@ -18,15 +18,16 @@ def convert_move_name(move_name):
 
 
 def convert_species_name(species_name):
-    species_name = (species_name.replace(" ", "-")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("Gastrodon-West", "Gastrodon")
-                    .replace("Galarian", "Galar")
-                    .replace("Alolan", "Alola")
-                    .replace("Paldean", "Paldea")
-                    .replace("Hisuian", "Hisui")
-                    )
+    species_name = (
+        species_name.replace(" ", "-")
+        .replace("(", "")
+        .replace(")", "")
+        .replace("Gastrodon-West", "Gastrodon")
+        .replace("Galarian", "Galar")
+        .replace("Alolan", "Alola")
+        .replace("Paldean", "Paldea")
+        .replace("Hisuian", "Hisui")
+    )
 
     if "Shadow" in species_name:
         regular_name = species_name.replace("-Shadow", "")
@@ -43,26 +44,43 @@ st.caption("Loading may take a while, please be patient.")
 
 url = url.strip()
 
-tiebreaker = st.selectbox("Tiebreaker",
-                          ["Resistance (Play! Pokémon)", "Buchholz", "Buchholz (Cut-1)", "Median Buchholz", "Game Wins",
-                           "Sonneborn-Berger", "Head-to-Head"], index=0)
-
-st.caption("Resistance is recommended for Swiss tournaments. Game wins is recommended for round robin tournaments.")
+tiebreaker = st.selectbox(
+    "Tiebreaker",
+    [
+        "Resistance (Play! Pokémon)",
+        "Buchholz/Solkoff",
+        "Buchholz (Cut-1)",
+        "Median Buchholz",
+        "Game Wins",
+        "Sonneborn-Berger",
+        "Head-to-Head",
+    ],
+    index=0,
+)
 
 with st.expander("What's the difference between tiebreakers?"):
-    st.write("""
+    st.write(
+        """
+    Resistance is recommended for Swiss-styled tournaments, as it takes into account the strength of your opponents. 
+    Sonneborn-Berger and Buchholz-based tiebreakers can be more volatile, as player drops distort tiebreakers as if they have lost the remaining rounds.
+    Game wins is recommended for round-robin tournaments.
+
     - Resistance: The average win rate of all of your opponents. This is the tiebreaker used by Play! Pokémon tournaments.
-    - Buchholz: The sum of the scores of all of your opponents.
+    - Buchholz/Solkoff: The sum of the scores of all of your opponents.
     - Buchholz (Cut-1): The sum of the scores of all of your opponents, minus the lowest score.
     - Median Buchholz: The sum of the scores of all of your opponents, minus the highest and lowest scores.
     - Game Wins: The number of games you have won.
     - Sonneborn-Berger: The sum of the scores of the players you have defeated.
     - Head-to-Head: The amount of matches you have won against the player(s) you are tied with.
-    """)
+    """
+    )
 
 if url:
     tournament_id = None
-    if "tournaments.dracoviz.com/en/tournament/" not in url and "dracoviz.gg/en/tournament/" not in url:
+    if (
+        "tournaments.dracoviz.com/en/tournament/" not in url
+        and "dracoviz.gg/en/tournament/" not in url
+    ):
         st.error("Invalid URL")
     else:
         try:
@@ -105,8 +123,6 @@ if url:
                         score1 = match["score"][0][0]
                         score2 = match["score"][0][1]
 
-                        print(player1, player2, score1, score2)
-
                         if score1 > score2:
                             winner = player1
                         elif score2 > score1:
@@ -114,7 +130,15 @@ if url:
                         else:
                             winner = None
 
-                        matches.append({"player1": player1, "player2": player2, "winner": winner, "player1_score": score1, "player2_score": score2})
+                        matches.append(
+                            {
+                                "player1": player1,
+                                "player2": player2,
+                                "winner": winner,
+                                "player1_score": score1,
+                                "player2_score": score2,
+                            }
+                        )
 
             player_dict = {}
 
@@ -127,10 +151,28 @@ if url:
                 player2_score = match["player2_score"]
 
                 if player1 not in player_dict:
-                    player_dict[player1] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": [], "won_against": [], "lost_against": []}
+                    player_dict[player1] = {
+                        "wins": 0,
+                        "losses": 0,
+                        "game_wins": 0,
+                        "game_losses": 0,
+                        "win_rate": 0,
+                        "opponents": [],
+                        "won_against": [],
+                        "lost_against": [],
+                    }
 
                 if player2 not in player_dict:
-                    player_dict[player2] = {"wins": 0, "losses": 0, "game_wins": 0, "game_losses":0, "win_rate": 0, "opponents": [], "won_against": [], "lost_against": []}
+                    player_dict[player2] = {
+                        "wins": 0,
+                        "losses": 0,
+                        "game_wins": 0,
+                        "game_losses": 0,
+                        "win_rate": 0,
+                        "opponents": [],
+                        "won_against": [],
+                        "lost_against": [],
+                    }
 
                 # don't add "Bye" as an opponent
                 if player2 != "Bye":
@@ -211,9 +253,13 @@ if url:
                 opponent_win_rates = []
 
                 for opponent in opponents:
-                    opponent_win_rates.append(max(player_dict[opponent]["win_rate"], 25))
+                    opponent_win_rates.append(
+                        max(player_dict[opponent]["win_rate"], 25)
+                    )
 
-                avg_opponent_win_rate = sum(opponent_win_rates) / len(opponent_win_rates)
+                avg_opponent_win_rate = sum(opponent_win_rates) / len(
+                    opponent_win_rates
+                )
                 player_dict[player]["avg_opponent_win_rate"] = avg_opponent_win_rate
 
             # now average the win rate of every player's opponents' opponents
@@ -233,7 +279,9 @@ if url:
                 # at least 25% win rate
                 opponent_opponent_win_rates = []
                 for opponent in opponents_opponents:
-                    opponent_opponent_win_rates.append(max(player_dict[opponent]["win_rate"], 25))
+                    opponent_opponent_win_rates.append(
+                        max(player_dict[opponent]["win_rate"], 25)
+                    )
                 avg_opponent_opponent_win_rate = sum(opponent_opponent_win_rates) / len(
                     opponent_opponent_win_rates
                 )
@@ -242,16 +290,25 @@ if url:
                 ] = avg_opponent_opponent_win_rate
 
             for player in player_dict:
-                player_dict[player]["buchholz"] = sum(player_dict[opponent]["wins"] for opponent in player_dict[player]["opponents"])
+                player_dict[player]["buchholz"] = sum(
+                    player_dict[opponent]["wins"]
+                    for opponent in player_dict[player]["opponents"]
+                )
 
             for player in player_dict:
-                opponent_scores = [player_dict[opponent]["wins"] for opponent in player_dict[player]["opponents"]]
+                opponent_scores = [
+                    player_dict[opponent]["wins"]
+                    for opponent in player_dict[player]["opponents"]
+                ]
                 if len(opponent_scores) > 1:
                     opponent_scores.remove(min(opponent_scores))
                 player_dict[player]["buchholz_cut_1"] = sum(opponent_scores)
 
             for player in player_dict:
-                opponent_scores = [player_dict[opponent]["wins"] for opponent in player_dict[player]["opponents"]]
+                opponent_scores = [
+                    player_dict[opponent]["wins"]
+                    for opponent in player_dict[player]["opponents"]
+                ]
                 if len(opponent_scores) > 2:
                     opponent_scores.remove(min(opponent_scores))
                     opponent_scores.remove(max(opponent_scores))
@@ -263,13 +320,53 @@ if url:
                     sonneborn_berger_score += player_dict[opponent]["wins"]
                 player_dict[player]["sonneborn_berger"] = sonneborn_berger_score
 
+            def _normalized_metric(player_metrics, key):
+                value = player_metrics.get(key, 0)
+                return round(value, 6) if isinstance(value, float) else value
+
+            tiebreaker_metric_keys = {
+                "Resistance (Play! Pokémon)": [
+                    "wins",
+                    "avg_opponent_win_rate",
+                    "avg_opponent_opponent_win_rate",
+                ],
+                "Buchholz/Solkoff": ["wins", "buchholz"],
+                "Buchholz (Cut-1)": ["wins", "buchholz_cut_1"],
+                "Median Buchholz": ["wins", "median_buchholz"],
+                "Game Wins": ["wins", "game_wins", "game_losses", "buchholz"],
+                "Sonneborn-Berger": ["wins", "sonneborn_berger", "buchholz"],
+                "Head-to-Head": ["wins"],
+            }
+
+            metric_keys = tiebreaker_metric_keys.get(tiebreaker, ["wins"])
+
+            tie_signatures = {
+                player: tuple(
+                    _normalized_metric(player_dict[player], key) for key in metric_keys
+                )
+                for player in player_dict
+            }
+
             for player in player_dict:
                 head_to_head_wins = 0
+                player_signature = tie_signatures.get(player)
                 for opponent in player_dict[player]["opponents"]:
-                    if player_dict[player]["wins"] == player_dict[opponent]["wins"] and opponent in player_dict[player]["won_against"]:
+                    if opponent == "Bye":
+                        continue
+                    if player_signature is None:
+                        continue
+                    opponent_signature = tie_signatures.get(opponent)
+                    if (
+                        opponent_signature is None
+                        or opponent_signature != player_signature
+                    ):
+                        continue
+                    if (
+                        player_dict[player]["wins"] == player_dict[opponent]["wins"]
+                        and opponent in player_dict[player]["won_against"]
+                    ):
                         head_to_head_wins += 1
                 player_dict[player]["head_to_head"] = head_to_head_wins
-
 
             # skip "Bye"
             try:
@@ -284,10 +381,11 @@ if url:
                         x[1]["wins"],
                         x[1]["avg_opponent_win_rate"],
                         x[1]["avg_opponent_opponent_win_rate"],
+                        x[1]["head_to_head"],
                     ),
                     reverse=True,
                 )
-            elif tiebreaker == "Buchholz":
+            elif tiebreaker == "Buchholz/Solkoff":
                 sorted_players = sorted(
                     player_dict.items(),
                     key=lambda x: (
@@ -351,7 +449,6 @@ if url:
                     reverse=True,
                 )
 
-
             table = {}
 
             for position, player in enumerate(sorted_players, start=1):
@@ -363,10 +460,11 @@ if url:
                             "Losses": player[1]["losses"],
                             "Opponents' Win Rate": f"{player[1]['avg_opponent_win_rate']:.2f}%",
                             "Opponents' Opponents' Win Rate": f"{player[1]['avg_opponent_opponent_win_rate']:.2f}%",
+                            "Head-to-Head": player[1]["head_to_head"],
                             "Game Wins": player[1]["game_wins"],
                             "Game Losses": player[1]["game_losses"],
                         }
-                    elif tiebreaker == "Buchholz":
+                    elif tiebreaker == "Buchholz/Solkoff":
                         table[position] = {
                             "Player": player[0],
                             "Wins": player[1]["wins"],
@@ -431,7 +529,12 @@ if url:
 
             with placeholder2:
                 df = pd.DataFrame(table).T
-                st.dataframe(data=df, column_config={"Team": st.column_config.LinkColumn(display_text="View Team")})
+                st.dataframe(
+                    data=df,
+                    column_config={
+                        "Team": st.column_config.LinkColumn(display_text="View Team")
+                    },
+                )
 
             usage_counter = {}
 
@@ -449,13 +552,21 @@ if url:
 
             # combine Gastrodon forms
 
-            if "Gastrodon (East)" in usage_counter and "Gastrodon (West)" in usage_counter:
-                usage_counter["Gastrodon"] = usage_counter["Gastrodon (East)"] + usage_counter["Gastrodon (West)"]
+            if (
+                "Gastrodon (East)" in usage_counter
+                and "Gastrodon (West)" in usage_counter
+            ):
+                usage_counter["Gastrodon"] = (
+                    usage_counter["Gastrodon (East)"]
+                    + usage_counter["Gastrodon (West)"]
+                )
                 del usage_counter["Gastrodon (East)"]
                 del usage_counter["Gastrodon (West)"]
 
             # sort the usage_counter dictionary by value and then by alphabetical order if the values are the same
-            sorted_usage_counter = dict(sorted(usage_counter.items(), key=lambda x: (-x[1], x[0])))
+            sorted_usage_counter = dict(
+                sorted(usage_counter.items(), key=lambda x: (-x[1], x[0]))
+            )
 
             final_usage_counter = {}
 
@@ -463,13 +574,12 @@ if url:
             for pokemon in sorted_usage_counter:
                 final_usage_counter[pokemon] = {
                     "Count": sorted_usage_counter[pokemon],
-                    "Percentage": f"{sorted_usage_counter[pokemon] / total_teams * 100:.2f}%"
+                    "Percentage": f"{sorted_usage_counter[pokemon] / total_teams * 100:.2f}%",
                 }
 
             with placeholder3:
                 df = pd.DataFrame(final_usage_counter).T
                 st.dataframe(data=df)
-
 
             if data.get("concluded"):
                 break
