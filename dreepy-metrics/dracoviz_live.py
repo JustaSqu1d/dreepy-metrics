@@ -545,12 +545,20 @@ if url:
                 if player.get("pokemon"):
                     total_teams += 1
                     for pokemon in player.get("pokemon"):
+                        is_shadow = pokemon.get("speciesName") and "Shadow" in pokemon.get("speciesName")
+                        species_name = pokemon.get("speciesName").replace(" (Shadow)", "")
+
                         if pokemon.get("speciesName") not in usage_counter:
-                            usage_counter[pokemon.get("speciesName")] = 0
-                        usage_counter[pokemon.get("speciesName")] += 1
+                            usage_counter[pokemon.get("speciesName")] = {
+                                "count": 0,
+                                "shadow_count": 0,
+                            }
+                        usage_counter[pokemon.get("speciesName")]["count"] += 1
+                        if is_shadow:
+                            usage_counter[pokemon.get("speciesName")]["shadow_count"] += 1
                         total_pokemon_count += 1
 
-            # combine Gastrodon forms
+            # combine Gastrodon and Gourgeist forms
 
             if (
                 "Gastrodon (East)" in usage_counter
@@ -562,19 +570,40 @@ if url:
                 )
                 del usage_counter["Gastrodon (East)"]
                 del usage_counter["Gastrodon (West)"]
+            
+            if "Gourgeist (Super)" in usage_counter and "Gourgeist (Small)" in usage_counter and "Gourgeist (Large)" in usage_counter and "Gourgeist (Average)" in usage_counter:
+                usage_counter["Gourgeist"] = (
+                    usage_counter["Gourgeist (Super)"]
+                    + usage_counter["Gourgeist (Small)"]
+                    + usage_counter["Gourgeist (Large)"]
+                    + usage_counter["Gourgeist (Average)"]
+                )
+                del usage_counter["Gourgeist (Super)"]
+                del usage_counter["Gourgeist (Small)"]
+                del usage_counter["Gourgeist (Large)"]
+                del usage_counter["Gourgeist (Average)"]
 
             # sort the usage_counter dictionary by value and then by alphabetical order if the values are the same
             sorted_usage_counter = dict(
-                sorted(usage_counter.items(), key=lambda x: (-x[1], x[0]))
+                sorted(usage_counter.items(), key=lambda x: (-x[1]["count"], x[0]))
             )
 
             final_usage_counter = {}
 
             # add percentage
             for pokemon in sorted_usage_counter:
+
+                # empty shadow string if shadow count is 0 to avoid "0 (NaN%)"
+                if sorted_usage_counter[pokemon]["shadow_count"] == 0:
+                    sorted_usage_counter[pokemon]["shadow_count"] = 0
+                    shadow_string = ""
+                else:
+                    shadow_string = f"{sorted_usage_counter[pokemon]['shadow_count']} ({sorted_usage_counter[pokemon]['shadow_count'] / sorted_usage_counter[pokemon]['count'] * 100:.2f}%)"
+
                 final_usage_counter[pokemon] = {
-                    "Count": sorted_usage_counter[pokemon],
-                    "Percentage": f"{sorted_usage_counter[pokemon] / total_teams * 100:.2f}%",
+                    "Count": sorted_usage_counter[pokemon]["count"],
+                    "Percentage": f"{sorted_usage_counter[pokemon]['count'] / total_teams * 100:.2f}%",
+                    "Shadow": shadow_string
                 }
 
             with placeholder3:
