@@ -548,14 +548,14 @@ if url:
                         is_shadow = pokemon.get("speciesName") and "Shadow" in pokemon.get("speciesName")
                         species_name = pokemon.get("speciesName").replace(" (Shadow)", "")
 
-                        if pokemon.get("speciesName") not in usage_counter:
-                            usage_counter[pokemon.get("speciesName")] = {
+                        if species_name not in usage_counter:
+                            usage_counter[species_name] = {
                                 "count": 0,
                                 "shadow_count": 0,
                             }
-                        usage_counter[pokemon.get("speciesName")]["count"] += 1
+                        usage_counter[species_name]["count"] += 1
                         if is_shadow:
-                            usage_counter[pokemon.get("speciesName")]["shadow_count"] += 1
+                            usage_counter[species_name]["shadow_count"] += 1
                         total_pokemon_count += 1
 
             # combine Gastrodon and Gourgeist forms
@@ -570,7 +570,7 @@ if url:
                 )
                 del usage_counter["Gastrodon (East)"]
                 del usage_counter["Gastrodon (West)"]
-            
+
             if "Gourgeist (Super)" in usage_counter and "Gourgeist (Small)" in usage_counter and "Gourgeist (Large)" in usage_counter and "Gourgeist (Average)" in usage_counter:
                 usage_counter["Gourgeist"] = (
                     usage_counter["Gourgeist (Super)"]
