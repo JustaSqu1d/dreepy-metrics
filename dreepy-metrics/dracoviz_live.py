@@ -564,22 +564,39 @@ if url:
                 "Gastrodon (East)" in usage_counter
                 or "Gastrodon (West)" in usage_counter
             ):
-                usage_counter["Gastrodon"] = (
-                    usage_counter["Gastrodon (East)"]
-                    + usage_counter["Gastrodon (West)"]
-                )
+                gastrodon_count = 0
+                gastrodon_shadow_count = 0
+                if "Gastrodon (East)" in usage_counter:
+                    gastrodon_count += usage_counter["Gastrodon (East)"]["count"]
+                    gastrodon_shadow_count += usage_counter["Gastrodon (East)"]["shadow_count"]
+                if "Gastrodon (West)" in usage_counter:
+                    gastrodon_count += usage_counter["Gastrodon (West)"]["count"]
+                    gastrodon_shadow_count += usage_counter["Gastrodon (West)"]["shadow_count"]
+                
+                usage_counter["Gastrodon"] = {
+                    "count": gastrodon_count,
+                    "shadow_count": gastrodon_shadow_count,
+                }
                 if "Gastrodon (East)" in usage_counter:
                     del usage_counter["Gastrodon (East)"]
                 if "Gastrodon (West)" in usage_counter:
                     del usage_counter["Gastrodon (West)"]
 
             if "Gourgeist (Super)" in usage_counter or "Gourgeist (Small)" in usage_counter or "Gourgeist (Large)" in usage_counter or "Gourgeist (Average)" in usage_counter:
-                usage_counter["Gourgeist"] = (
-                    usage_counter.get("Gourgeist (Super)", {"count": 0, "shadow_count": 0})
-                    + usage_counter.get("Gourgeist (Small)", {"count": 0, "shadow_count": 0})
-                    + usage_counter.get("Gourgeist (Large)", {"count": 0, "shadow_count": 0})
-                    + usage_counter.get("Gourgeist (Average)", {"count": 0, "shadow_count": 0})
-                )
+                count = 0
+                shadow_count = 0
+
+                for form in ["Super", "Small", "Large", "Average"]:
+                    form_name = f"Gourgeist ({form})"
+                    if form_name in usage_counter:
+                        count += usage_counter[form_name]["count"]
+                        shadow_count += usage_counter[form_name]["shadow_count"]
+                        
+                usage_counter["Gourgeist"] = {
+                    "count": count,
+                    "shadow_count": shadow_count,
+                }
+
                 if "Gourgeist (Super)" in usage_counter:
                     del usage_counter["Gourgeist (Super)"]
                 if "Gourgeist (Small)" in usage_counter:
