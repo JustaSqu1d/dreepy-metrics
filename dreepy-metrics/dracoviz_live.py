@@ -562,26 +562,32 @@ if url:
 
             if (
                 "Gastrodon (East)" in usage_counter
-                and "Gastrodon (West)" in usage_counter
+                or "Gastrodon (West)" in usage_counter
             ):
                 usage_counter["Gastrodon"] = (
                     usage_counter["Gastrodon (East)"]
                     + usage_counter["Gastrodon (West)"]
                 )
-                del usage_counter["Gastrodon (East)"]
-                del usage_counter["Gastrodon (West)"]
+                if "Gastrodon (East)" in usage_counter:
+                    del usage_counter["Gastrodon (East)"]
+                if "Gastrodon (West)" in usage_counter:
+                    del usage_counter["Gastrodon (West)"]
 
-            if "Gourgeist (Super)" in usage_counter and "Gourgeist (Small)" in usage_counter and "Gourgeist (Large)" in usage_counter and "Gourgeist (Average)" in usage_counter:
+            if "Gourgeist (Super)" in usage_counter or "Gourgeist (Small)" in usage_counter or "Gourgeist (Large)" in usage_counter or "Gourgeist (Average)" in usage_counter:
                 usage_counter["Gourgeist"] = (
-                    usage_counter["Gourgeist (Super)"]
-                    + usage_counter["Gourgeist (Small)"]
-                    + usage_counter["Gourgeist (Large)"]
-                    + usage_counter["Gourgeist (Average)"]
+                    usage_counter.get("Gourgeist (Super)", {"count": 0, "shadow_count": 0})
+                    + usage_counter.get("Gourgeist (Small)", {"count": 0, "shadow_count": 0})
+                    + usage_counter.get("Gourgeist (Large)", {"count": 0, "shadow_count": 0})
+                    + usage_counter.get("Gourgeist (Average)", {"count": 0, "shadow_count": 0})
                 )
-                del usage_counter["Gourgeist (Super)"]
-                del usage_counter["Gourgeist (Small)"]
-                del usage_counter["Gourgeist (Large)"]
-                del usage_counter["Gourgeist (Average)"]
+                if "Gourgeist (Super)" in usage_counter:
+                    del usage_counter["Gourgeist (Super)"]
+                if "Gourgeist (Small)" in usage_counter:
+                    del usage_counter["Gourgeist (Small)"]
+                if "Gourgeist (Large)" in usage_counter:
+                    del usage_counter["Gourgeist (Large)"]
+                if "Gourgeist (Average)" in usage_counter:
+                    del usage_counter["Gourgeist (Average)"]
 
             # sort the usage_counter dictionary by value and then by alphabetical order if the values are the same
             sorted_usage_counter = dict(
